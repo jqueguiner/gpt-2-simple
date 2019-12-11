@@ -358,7 +358,7 @@ def finetune(sess,
                     (opt_apply, loss, summary_op),
                     feed_dict={context: sample_batch()})
 
-            if v_loss < best_loss:
+            if v_loss < best_loss  and v_loss > 2.00:
                 loss_sample_text = generate_samples()
                 summary_loss_sample = tf.compat.v1.summary.text('best_loss_sample', tf.convert_to_tensor(loss_sample_text))
                 loss_text = sess.run(summary_loss_sample)
