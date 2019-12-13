@@ -358,14 +358,16 @@ def finetune(sess,
                     (opt_apply, loss, summary_op),
                     feed_dict={context: sample_batch()})
 
-            if v_loss < best_loss  and v_loss > 2.00:
-                loss_sample_text = generate_samples()
+            summary_writer.add_summary(v_summary, counter)
+            
+            if v_loss < best_loss and v_loss > 2.00:
+                print("")
+                best_loss = v_loss
+                loss_sample_text = "===== LOSS : " + str(best_loss) + "=====" + generate_samples(False)
                 summary_loss_sample = tf.compat.v1.summary.text('best_loss_sample', tf.convert_to_tensor(loss_sample_text))
                 loss_text = sess.run(summary_loss_sample)
-                summary_writer.add_summary(loss_text, loss)
+                summary_writer.add_summary(loss_text, counter)
                         
-            summary_writer.add_summary(v_summary, counter)
-          
             if counter % print_every == 0:
                 avg_loss = (avg_loss[0] * 0.99 + v_loss,
                             avg_loss[1] * 0.99 + 1.0)
